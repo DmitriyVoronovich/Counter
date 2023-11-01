@@ -1,29 +1,30 @@
 import React from 'react';
 import {Button} from "../../component/button/Button";
 import './counter.css'
+import {ControlInfoType, ControlVisibleButtonType} from "../../App";
+import {isVisible} from "@testing-library/user-event/dist/utils";
 
 type CounterPropsType = {
-    count: number
+    resultValue: number
     counterIncrement: () => void
-    error: boolean
+    controlInfo: ControlInfoType
     resetCounter: () => void
-    disabled: boolean
-    settingDisabled: boolean
+    controlVisibleButton: ControlVisibleButtonType
 }
 
 export const Counter: React.FC<CounterPropsType> = (props) => {
-    const {count, counterIncrement, error, resetCounter, disabled, settingDisabled} = props;
+    const {resultValue, counterIncrement, controlInfo:{isVisible, isError, message}, resetCounter, controlVisibleButton:{isInitialValueSet, isResultMax}} = props;
 
     return (
         <div className={'counter_container'}>
             <div className={'counter'}>
-                <span className={error ? 'error_count' : 'count'}>
-                    {count}
+                <span className={isError ||  isResultMax ? 'error_count' : 'count'}>
+                    {isError || isVisible ? message : resultValue}
                 </span>
             </div>
             <div className={'counter_button'}>
-                <Button name={'inc'} callback={counterIncrement} error={error} disabled={disabled} block={!settingDisabled}/>
-                <Button name={'reset'} callback={resetCounter} error={error} block={!settingDisabled}/>
+                <Button name={'inc'} callback={counterIncrement} error={isError} disabled={isResultMax} block={!isInitialValueSet}/>
+                <Button name={'reset'} callback={resetCounter} error={isError} block={!isInitialValueSet}/>
             </div>
         </div>
     );
