@@ -42,7 +42,7 @@ function App() {
 
     const changeMaxValue = ( max: string) => {
         setSettingDisabled(false)
-        if (max === startValue) {
+        if (max <= startValue || +max <= 0) {
             setCount('Incorrect value!')
             changeError(true);
             setMaxValue(max)
