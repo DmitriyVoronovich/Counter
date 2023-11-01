@@ -3,7 +3,7 @@ import {Button} from "../../component/button/Button";
 import './counter.css'
 
 type CounterPropsType = {
-    count: string
+    count: number
     counterIncrement: () => void
     error: boolean
     resetCounter: () => void

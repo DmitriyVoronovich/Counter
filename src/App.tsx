@@ -3,30 +3,38 @@ import './App.css';
 import {Settings} from "./assets/settings/Settings";
 import {Counter} from "./assets/counter/Counter";
 
-function App() {
-    const [maxValue, setMaxValue] = useState('5');
-    const [startValue, setStartValue] = useState('0');
-    const [count, setCount] = useState('Enter values and press \'set\'');
-    const [error, setError] = useState(false);
-    const [disabled, setDisabled] = useState(false);
-    const [settingDisabled, setSettingDisabled] = useState(false);
+const instructionsMessage = 'Enter values and press \'set\'';
+const errorMessage = 'Incorrect value!'
 
+export type InitialValueType = {
+    maxValue: number,
+    startValue: number
+}
+
+function App() {
+    const [initialValue, setInitialValue] = useState<InitialValueType>({
+        maxValue: 1,
+        startValue: 0
+    });
+    const [resultValue, setResultValue] = useState(0);
+    const [error, setError] = useState(false);//{ isError: false, message: 'Enter values and press 'set'', isVisible: false } - controlInfo
+    const [disabled, setDisabled] = useState(false);//create controlVisibleButton
+    const [settingDisabled, setSettingDisabled] = useState(false);
     useEffect(() => {
-        let max = localStorage.getItem('max')
-        let start = localStorage.getItem('start')
+        const max =  localStorage.getItem('max');
+        const start = localStorage.getItem('start');
         if (max && start) {
-            setMaxValue(max)
-            setStartValue(start)
-            setCount(start)
+            let maxLocalValue = JSON.parse(max);
+            let startLocalValue = JSON.parse(start);
+            setInitialValue({maxValue: maxLocalValue, startValue: startLocalValue})
+            setResultValue(initialValue.startValue)
         }
     }, [])
 
     const counterIncrement = () => {
-        if (+count === +maxValue - 1) {
+        setResultValue(resultValue + 1)
+        if (resultValue === initialValue.maxValue - 1 ) {
             setDisabled(true)
-            return setCount(`${+count +1}`)
-        } else {
-            return setCount(`${+count +1}`)
         }
     };
 
@@ -36,54 +44,54 @@ function App() {
 
     const resetCounter = () => {
         setDisabled(false)
-        setCount(startValue);
+        setResultValue(initialValue.startValue);
         setError(false);
     };
 
-    const changeMaxValue = ( max: string) => {
-        setSettingDisabled(false)
-        if (max <= startValue || +max <= 0) {
-            setCount('Incorrect value!')
+    const changeMaxValue = ( maxInputValue: string) => {
+        setSettingDisabled(false);
+        const max = parseInt(maxInputValue);
+        setInitialValue({...initialValue, maxValue: max});
+        if (max <= initialValue.startValue || max <= 0) {
+            // setResultValue('Incorrect value!')
             changeError(true);
-            setMaxValue(max)
         } else {
-            setCount('Enter values and press \'set\'')
+            // setResultValue('Enter values and press \'set\'')
             changeError(false);
-            setMaxValue(max)
         }
     };
 
-    const changeStartValue = ( start: string) => {
-        setSettingDisabled(false)
-        if (+start < 0 || start >= maxValue) {
-            setCount('Incorrect value!')
+    const changeStartValue = ( startInputValue: string) => {
+        setSettingDisabled(false);
+        const start = parseInt(startInputValue);
+        setInitialValue({...initialValue, startValue: start});
+
+        if (start < 0 || start >= initialValue.maxValue) {
+            // setResultValue('Incorrect value!')
             changeError(true);
-            setStartValue(`${start}`)
         } else {
-            setCount('Enter values and press \'set\'')
+            // setResultValue('Enter values and press \'set\'')
             changeError(false);
-            setStartValue(`${start}`)
         }
     };
 
     const initCounter = () => {
         setSettingDisabled(true)
-        setCount(startValue)
+        setResultValue(initialValue.startValue)
         setDisabled(false)
-        localStorage.setItem('max', maxValue)
-        localStorage.setItem('start', startValue)
+        localStorage.setItem('max', JSON.stringify(initialValue.maxValue))
+        localStorage.setItem('start', JSON.stringify(initialValue.startValue))
     }
 
     return (
         <div className="App">
             <Settings changeMaxValue={changeMaxValue}
-                      startValue={startValue}
-                      maxValue={maxValue}
+                      initialValue={initialValue}
                       error={error}
                       settingDisabled={settingDisabled}
                       changeStartValue={changeStartValue}
                       initCounter={initCounter}/>
-            <Counter count={count}
+            <Counter count={resultValue}
                      counterIncrement={counterIncrement}
                      error={error}
                      disabled={disabled}
