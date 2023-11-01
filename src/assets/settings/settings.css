@@ -1,0 +1,62 @@
+.setting_container {
+    padding: 3vh;
+    width: 20%;
+    height: 35vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 30px;
+    background-color: blanchedalmond;
+    border: 2px solid #e7b749;
+    border-radius: 10px;
+}
+
+.setting {
+    padding: 2vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 30px;
+    border: 2px solid #e7b749;
+    border-radius: 10px;
+}
+
+.setting_value {
+    width: 100%;
+    height: 5vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+
+.setting_value h4 {
+
+}
+
+.setting_value_input {
+    width: 5vw;
+    height: 3vh;
+    border: 2px solid #e7b749;
+    text-align: center;
+}
+
+.setting_value_input_error {
+    color: white;
+    width: 5vw;
+    height: 3vh;
+    border: 2px solid red;
+    text-align: center;
+    background-color: red;
+}
+
+.setting_button {
+    padding: 2vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    border: 2px solid #e7b749;
+    border-radius: 10px;
+}
