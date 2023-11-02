@@ -1,19 +1,19 @@
 import React, {ChangeEvent} from 'react';
 import {Button} from "../../component/button/Button";
 import './settings.css'
-import {ControlInfoType, ControlVisibleButtonType, InitialValueType} from "../../App";
+import {isPlaceholderVisibleType, ControlVisibleButtonType, InitialValueType} from "../../App";
 
 type SettingsPropsType = {
     changeMaxValue: (max: string) => void
     changeStartValue: (max: string) => void
-    controlInfo: ControlInfoType
+    isPlaceholderVisible: isPlaceholderVisibleType
     controlVisibleButton: ControlVisibleButtonType
     initialValue: InitialValueType
     initCounter: () => void
 }
 
 export const Settings: React.FC<SettingsPropsType> = (props) => {
-    const {changeMaxValue, controlInfo:{isError}, changeStartValue, initialValue:{maxValue, startValue}, initCounter, controlVisibleButton:{isInitialValueSet}} = props;
+    const {changeMaxValue, isPlaceholderVisible:{isError}, changeStartValue, initialValue:{maxValue, startValue}, initCounter, controlVisibleButton:{isInitialValueSet}} = props;
 
     const changeInputValue = ({currentTarget: {value, id}}: ChangeEvent<HTMLInputElement>) => id === 'maxValue' ? changeMaxValue(value) : changeStartValue(value);
 

@@ -11,7 +11,7 @@ export type InitialValueType = {
     startValue: number
 };
 
-export type ControlInfoType = {
+export type isPlaceholderVisibleType = {
     isError: boolean
     message: string
     isVisible: boolean
@@ -29,7 +29,7 @@ function App() {
         startValue: 0
     });
     const [resultValue, setResultValue] = useState(0);
-    const [controlInfo, setControlInfo] = useState<ControlInfoType>({
+    const [isPlaceholderVisible, setIsPlaceholderVisible] = useState<isPlaceholderVisibleType>({
         isError: false,
         message: instructionsMessage,
         isVisible: true
@@ -43,8 +43,8 @@ function App() {
         const max =  localStorage.getItem('max');
         const start = localStorage.getItem('start');
         if (max && start) {
-            let maxLocalValue = JSON.parse(max);
-            let startLocalValue = JSON.parse(start);
+            const maxLocalValue = JSON.parse(max);
+            const startLocalValue = JSON.parse(start);
             setInitialValue({maxValue: maxLocalValue, startValue: startLocalValue})
             setResultValue(initialValue.startValue)
         }
@@ -60,38 +60,38 @@ function App() {
     const resetCounter = () => {
         setControlVisibleButton({...controlVisibleButton, isResultMax: false});
         setResultValue(initialValue.startValue);
-        setControlInfo({...controlInfo, isError: false});
+        setIsPlaceholderVisible({...isPlaceholderVisible, isError: false});
     };
 
     const changeMaxValue = ( maxInputValue: string) => {
         const max = parseInt(maxInputValue);
 
-        setControlVisibleButton({...controlVisibleButton, isInitialValueSet: false});
+        setControlVisibleButton({isResultMax: false, isInitialValueSet: false});
         setInitialValue({...initialValue, maxValue: max});
 
         if (max <= initialValue.startValue || max <= 0) {
-            setControlInfo({...controlInfo, isError: true, message: errorMessage});
+            setIsPlaceholderVisible({...isPlaceholderVisible, isError: true, message: errorMessage});
         } else {
-            setControlInfo({isVisible: true, isError: false, message: instructionsMessage});
+            setIsPlaceholderVisible({isVisible: true, isError: false, message: instructionsMessage});
         }
     };
 
     const changeStartValue = ( startInputValue: string) => {
-        setControlVisibleButton({...controlVisibleButton, isInitialValueSet: false});
+        setControlVisibleButton({isResultMax: false, isInitialValueSet: false});
         const start = parseInt(startInputValue);
         setInitialValue({...initialValue, startValue: start});
 
         if (start < 0 || start >= initialValue.maxValue) {
-            setControlInfo({...controlInfo, isError: true, message: errorMessage});
+            setIsPlaceholderVisible({...isPlaceholderVisible, isError: true, message: errorMessage});
         } else {
-            setControlInfo({isVisible: true, isError: false, message: instructionsMessage});
+            setIsPlaceholderVisible({isVisible: true, isError: false, message: instructionsMessage});
         }
     };
 
     const initCounter = () => {
         setControlVisibleButton({ isInitialValueSet: true, isResultMax: false});
         setResultValue(initialValue.startValue);
-        setControlInfo({...controlInfo, isVisible: false});
+        setIsPlaceholderVisible({...isPlaceholderVisible, isVisible: false});
         localStorage.setItem('max', JSON.stringify(initialValue.maxValue));
         localStorage.setItem('start', JSON.stringify(initialValue.startValue));
     }
@@ -100,13 +100,13 @@ function App() {
         <div className="App">
             <Settings changeMaxValue={changeMaxValue}
                       initialValue={initialValue}
-                      controlInfo={controlInfo}
+                      isPlaceholderVisible={isPlaceholderVisible}
                       controlVisibleButton={controlVisibleButton}
                       changeStartValue={changeStartValue}
                       initCounter={initCounter}/>
             <Counter resultValue={resultValue}
                      counterIncrement={counterIncrement}
-                     controlInfo={controlInfo}
+                     isPlaceholderVisible={isPlaceholderVisible}
                      controlVisibleButton={controlVisibleButton}
                      resetCounter={resetCounter}/>
         </div>

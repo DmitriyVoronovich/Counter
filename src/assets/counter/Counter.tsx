@@ -1,19 +1,19 @@
 import React from 'react';
 import {Button} from "../../component/button/Button";
 import './counter.css'
-import {ControlInfoType, ControlVisibleButtonType} from "../../App";
+import {isPlaceholderVisibleType, ControlVisibleButtonType} from "../../App";
 import {isVisible} from "@testing-library/user-event/dist/utils";
 
 type CounterPropsType = {
     resultValue: number
     counterIncrement: () => void
-    controlInfo: ControlInfoType
+    isPlaceholderVisible: isPlaceholderVisibleType
     resetCounter: () => void
     controlVisibleButton: ControlVisibleButtonType
 }
 
 export const Counter: React.FC<CounterPropsType> = (props) => {
-    const {resultValue, counterIncrement, controlInfo:{isVisible, isError, message}, resetCounter, controlVisibleButton:{isInitialValueSet, isResultMax}} = props;
+    const {resultValue, counterIncrement, isPlaceholderVisible:{isVisible, isError, message}, resetCounter, controlVisibleButton:{isInitialValueSet, isResultMax}} = props;
 
     return (
         <div className={'counter_container'}>
