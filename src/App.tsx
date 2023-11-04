@@ -3,8 +3,8 @@ import './App.css';
 import {Settings} from "./assets/settings/Settings";
 import {Counter} from "./assets/counter/Counter";
 
-const instructionsMessage = 'Enter values and press \'set\'';
-const errorMessage = 'Incorrect value!';
+const INSTRUCTIONS_MESSAGE = 'Enter values and press \'set\'';
+const ERROR_MESSAGE = 'Incorrect value!';
 
 export type InitialValueType = {
     maxValue: number,
@@ -31,7 +31,7 @@ function App() {
     const [resultValue, setResultValue] = useState(0);
     const [isPlaceholderVisible, setIsPlaceholderVisible] = useState<isPlaceholderVisibleType>({
         isError: false,
-        message: instructionsMessage,
+        message: INSTRUCTIONS_MESSAGE,
         isVisible: true
     });
     const [controlVisibleButton, setControlVisibleButton] = useState<ControlVisibleButtonType>({
@@ -70,9 +70,9 @@ function App() {
         setInitialValue({...initialValue, maxValue: max});
 
         if (max <= initialValue.startValue || max <= 0) {
-            setIsPlaceholderVisible({...isPlaceholderVisible, isError: true, message: errorMessage});
+            setIsPlaceholderVisible({...isPlaceholderVisible, isError: true, message: ERROR_MESSAGE});
         } else {
-            setIsPlaceholderVisible({isVisible: true, isError: false, message: instructionsMessage});
+            setIsPlaceholderVisible({isVisible: true, isError: false, message: INSTRUCTIONS_MESSAGE});
         }
     };
 
@@ -82,9 +82,9 @@ function App() {
         setInitialValue({...initialValue, startValue: start});
 
         if (start < 0 || start >= initialValue.maxValue) {
-            setIsPlaceholderVisible({...isPlaceholderVisible, isError: true, message: errorMessage});
+            setIsPlaceholderVisible({...isPlaceholderVisible, isError: true, message: ERROR_MESSAGE});
         } else {
-            setIsPlaceholderVisible({isVisible: true, isError: false, message: instructionsMessage});
+            setIsPlaceholderVisible({isVisible: true, isError: false, message: INSTRUCTIONS_MESSAGE});
         }
     };
 
