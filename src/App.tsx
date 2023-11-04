@@ -3,91 +3,111 @@ import './App.css';
 import {Settings} from "./assets/settings/Settings";
 import {Counter} from "./assets/counter/Counter";
 
+const INSTRUCTIONS_MESSAGE = 'Enter values and press \'set\'';
+const ERROR_MESSAGE = 'Incorrect value!';
+
+export type InitialValueType = {
+    maxValue: number,
+    startValue: number
+};
+
+export type isPlaceholderVisibleType = {
+    isError: boolean
+    message: string
+    isVisible: boolean
+};
+
+export type ControlVisibleButtonType = {
+    isResultMax: boolean
+    isInitialValueSet: boolean
+};
+
 function App() {
-    const [maxValue, setMaxValue] = useState('5');
-    const [startValue, setStartValue] = useState('0');
-    const [count, setCount] = useState('Enter values and press \'set\'');
-    const [error, setError] = useState(false);
-    const [disabled, setDisabled] = useState(false);
-    const [settingDisabled, setSettingDisabled] = useState(false);
+
+    const [initialValue, setInitialValue] = useState<InitialValueType>({
+        maxValue: 1,
+        startValue: 0
+    });
+    const [resultValue, setResultValue] = useState(0);
+    const [isPlaceholderVisible, setIsPlaceholderVisible] = useState<isPlaceholderVisibleType>({
+        isError: false,
+        message: INSTRUCTIONS_MESSAGE,
+        isVisible: true
+    });
+    const [controlVisibleButton, setControlVisibleButton] = useState<ControlVisibleButtonType>({
+        isResultMax: false,
+        isInitialValueSet: false
+    });
 
     useEffect(() => {
-        let max = localStorage.getItem('max')
-        let start = localStorage.getItem('start')
+        const max =  localStorage.getItem('max');
+        const start = localStorage.getItem('start');
         if (max && start) {
-            setMaxValue(max)
-            setStartValue(start)
-            setCount(start)
+            const maxLocalValue = JSON.parse(max);
+            const startLocalValue = JSON.parse(start);
+            setInitialValue({maxValue: maxLocalValue, startValue: startLocalValue})
+            setResultValue(initialValue.startValue)
         }
-    }, [])
+    }, []);
 
     const counterIncrement = () => {
-        if (+count === +maxValue - 1) {
-            setDisabled(true)
-            return setCount(`${+count +1}`)
-        } else {
-            return setCount(`${+count +1}`)
+        setResultValue(resultValue + 1);
+        if (resultValue === initialValue.maxValue - 1 ) {
+            setControlVisibleButton({...controlVisibleButton, isResultMax: true})
         }
     };
-
-    const changeError = (errorValue: boolean) => {
-        setError(errorValue)
-    }
 
     const resetCounter = () => {
-        setDisabled(false)
-        setCount(startValue);
-        setError(false);
+        setControlVisibleButton({...controlVisibleButton, isResultMax: false});
+        setResultValue(initialValue.startValue);
+        setIsPlaceholderVisible({...isPlaceholderVisible, isError: false});
     };
 
-    const changeMaxValue = ( max: string) => {
-        setSettingDisabled(false)
-        if (max <= startValue || +max <= 0) {
-            setCount('Incorrect value!')
-            changeError(true);
-            setMaxValue(max)
+    const changeMaxValue = ( maxInputValue: string) => {
+        const max = parseInt(maxInputValue);
+
+        setControlVisibleButton({isResultMax: false, isInitialValueSet: false});
+        setInitialValue({...initialValue, maxValue: max});
+
+        if (max <= initialValue.startValue || max <= 0) {
+            setIsPlaceholderVisible({...isPlaceholderVisible, isError: true, message: ERROR_MESSAGE});
         } else {
-            setCount('Enter values and press \'set\'')
-            changeError(false);
-            setMaxValue(max)
+            setIsPlaceholderVisible({isVisible: true, isError: false, message: INSTRUCTIONS_MESSAGE});
         }
     };
 
-    const changeStartValue = ( start: string) => {
-        setSettingDisabled(false)
-        if (+start < 0 || start >= maxValue) {
-            setCount('Incorrect value!')
-            changeError(true);
-            setStartValue(`${start}`)
+    const changeStartValue = ( startInputValue: string) => {
+        setControlVisibleButton({isResultMax: false, isInitialValueSet: false});
+        const start = parseInt(startInputValue);
+        setInitialValue({...initialValue, startValue: start});
+
+        if (start < 0 || start >= initialValue.maxValue) {
+            setIsPlaceholderVisible({...isPlaceholderVisible, isError: true, message: ERROR_MESSAGE});
         } else {
-            setCount('Enter values and press \'set\'')
-            changeError(false);
-            setStartValue(`${start}`)
+            setIsPlaceholderVisible({isVisible: true, isError: false, message: INSTRUCTIONS_MESSAGE});
         }
     };
 
     const initCounter = () => {
-        setSettingDisabled(true)
-        setCount(startValue)
-        setDisabled(false)
-        localStorage.setItem('max', maxValue)
-        localStorage.setItem('start', startValue)
+        setControlVisibleButton({ isInitialValueSet: true, isResultMax: false});
+        setResultValue(initialValue.startValue);
+        setIsPlaceholderVisible({...isPlaceholderVisible, isVisible: false});
+        localStorage.setItem('max', JSON.stringify(initialValue.maxValue));
+        localStorage.setItem('start', JSON.stringify(initialValue.startValue));
     }
 
     return (
         <div className="App">
             <Settings changeMaxValue={changeMaxValue}
-                      startValue={startValue}
-                      maxValue={maxValue}
-                      error={error}
-                      settingDisabled={settingDisabled}
+                      initialValue={initialValue}
+                      isPlaceholderVisible={isPlaceholderVisible}
+                      controlVisibleButton={controlVisibleButton}
                       changeStartValue={changeStartValue}
                       initCounter={initCounter}/>
-            <Counter count={count}
+            <Counter resultValue={resultValue}
                      counterIncrement={counterIncrement}
-                     error={error}
-                     disabled={disabled}
-                     settingDisabled={settingDisabled}
+                     isPlaceholderVisible={isPlaceholderVisible}
+                     controlVisibleButton={controlVisibleButton}
                      resetCounter={resetCounter}/>
         </div>
     );
