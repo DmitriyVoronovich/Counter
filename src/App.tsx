@@ -2,9 +2,21 @@ import React, {useEffect, useState} from 'react';
 import './App.css';
 import {Settings} from "./assets/settings/Settings";
 import {Counter} from "./assets/counter/Counter";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "./store/store";
+import {initStartValueAC} from "./reducer/initialReducer";
+import {
+    controlButtonMaxValueAC,
+    InitCounterValueAC,
+    resetButtonMaxValueAC
+} from "./reducer/controlButtonReducer";
+import {
+    initPlaceholderAC,
+    resetPlaceholderAC
+} from "./reducer/placeholderReducer";
 
-const INSTRUCTIONS_MESSAGE = 'Enter values and press \'set\'';
-const ERROR_MESSAGE = 'Incorrect value!';
+export const INSTRUCTIONS_MESSAGE = 'Enter values and press \'set\'';
+export const ERROR_MESSAGE = 'Incorrect value!';
 
 export type InitialValueType = {
     maxValue: number,
@@ -24,20 +36,10 @@ export type ControlVisibleButtonType = {
 
 function App() {
 
-    const [initialValue, setInitialValue] = useState<InitialValueType>({
-        maxValue: 1,
-        startValue: 0
-    });
+    const initialValue = useSelector<AppRootStateType, InitialValueType>(state => state.initialValue);
+    const dispatch = useDispatch();
+
     const [resultValue, setResultValue] = useState(0);
-    const [isPlaceholderVisible, setIsPlaceholderVisible] = useState<isPlaceholderVisibleType>({
-        isError: false,
-        message: INSTRUCTIONS_MESSAGE,
-        isVisible: true
-    });
-    const [controlVisibleButton, setControlVisibleButton] = useState<ControlVisibleButtonType>({
-        isResultMax: false,
-        isInitialValueSet: false
-    });
 
     useEffect(() => {
         const max =  localStorage.getItem('max');
@@ -45,69 +47,37 @@ function App() {
         if (max && start) {
             const maxLocalValue = JSON.parse(max);
             const startLocalValue = JSON.parse(start);
-            setInitialValue({maxValue: maxLocalValue, startValue: startLocalValue})
-            setResultValue(initialValue.startValue)
+            dispatch(initStartValueAC(maxLocalValue, startLocalValue));
+            setResultValue(initialValue.startValue);
         }
     }, []);
 
     const counterIncrement = () => {
         setResultValue(resultValue + 1);
         if (resultValue === initialValue.maxValue - 1 ) {
-            setControlVisibleButton({...controlVisibleButton, isResultMax: true})
+            dispatch(controlButtonMaxValueAC());
         }
     };
 
     const resetCounter = () => {
-        setControlVisibleButton({...controlVisibleButton, isResultMax: false});
+        dispatch(resetButtonMaxValueAC());
         setResultValue(initialValue.startValue);
-        setIsPlaceholderVisible({...isPlaceholderVisible, isError: false});
-    };
-
-    const changeMaxValue = ( maxInputValue: string) => {
-        const max = parseInt(maxInputValue);
-
-        setControlVisibleButton({isResultMax: false, isInitialValueSet: false});
-        setInitialValue({...initialValue, maxValue: max});
-
-        if (max <= initialValue.startValue || max <= 0) {
-            setIsPlaceholderVisible({...isPlaceholderVisible, isError: true, message: ERROR_MESSAGE});
-        } else {
-            setIsPlaceholderVisible({isVisible: true, isError: false, message: INSTRUCTIONS_MESSAGE});
-        }
-    };
-
-    const changeStartValue = ( startInputValue: string) => {
-        setControlVisibleButton({isResultMax: false, isInitialValueSet: false});
-        const start = parseInt(startInputValue);
-        setInitialValue({...initialValue, startValue: start});
-
-        if (start < 0 || start >= initialValue.maxValue) {
-            setIsPlaceholderVisible({...isPlaceholderVisible, isError: true, message: ERROR_MESSAGE});
-        } else {
-            setIsPlaceholderVisible({isVisible: true, isError: false, message: INSTRUCTIONS_MESSAGE});
-        }
+        dispatch(resetPlaceholderAC());
     };
 
     const initCounter = () => {
-        setControlVisibleButton({ isInitialValueSet: true, isResultMax: false});
+        dispatch(InitCounterValueAC());
         setResultValue(initialValue.startValue);
-        setIsPlaceholderVisible({...isPlaceholderVisible, isVisible: false});
+        dispatch(initPlaceholderAC());
         localStorage.setItem('max', JSON.stringify(initialValue.maxValue));
         localStorage.setItem('start', JSON.stringify(initialValue.startValue));
     }
 
     return (
         <div className="App">
-            <Settings changeMaxValue={changeMaxValue}
-                      initialValue={initialValue}
-                      isPlaceholderVisible={isPlaceholderVisible}
-                      controlVisibleButton={controlVisibleButton}
-                      changeStartValue={changeStartValue}
-                      initCounter={initCounter}/>
+            <Settings initCounter={initCounter}/>
             <Counter resultValue={resultValue}
                      counterIncrement={counterIncrement}
-                     isPlaceholderVisible={isPlaceholderVisible}
-                     controlVisibleButton={controlVisibleButton}
                      resetCounter={resetCounter}/>
         </div>
     );

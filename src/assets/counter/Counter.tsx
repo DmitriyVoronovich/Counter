@@ -1,19 +1,22 @@
 import React from 'react';
 import {Button} from "../../component/button/Button";
 import './counter.css'
-import {isPlaceholderVisibleType, ControlVisibleButtonType} from "../../App";
-import {isVisible} from "@testing-library/user-event/dist/utils";
+import {ControlVisibleButtonType, isPlaceholderVisibleType} from "../../App";
+import {useSelector} from "react-redux";
+import {AppRootStateType} from "../../store/store";
 
 type CounterPropsType = {
     resultValue: number
     counterIncrement: () => void
-    isPlaceholderVisible: isPlaceholderVisibleType
     resetCounter: () => void
-    controlVisibleButton: ControlVisibleButtonType
 }
 
 export const Counter: React.FC<CounterPropsType> = (props) => {
-    const {resultValue, counterIncrement, isPlaceholderVisible:{isVisible, isError, message}, resetCounter, controlVisibleButton:{isInitialValueSet, isResultMax}} = props;
+    const placeholder = useSelector<AppRootStateType, isPlaceholderVisibleType>(state => state.placeholder);
+    const controlButton = useSelector<AppRootStateType, ControlVisibleButtonType>(state => state.controlButton);
+    const {isInitialValueSet, isResultMax} = controlButton;
+    const {isVisible, isError, message} = placeholder;
+    const {resultValue, counterIncrement, resetCounter} = props;
 
     return (
         <div className={'counter_container'}>
