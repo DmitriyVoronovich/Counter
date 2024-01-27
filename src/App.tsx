@@ -5,15 +5,8 @@ import {Counter} from "./assets/counter/Counter";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "./store/store";
 import {initStartValueAC} from "./reducer/initialReducer";
-import {
-    controlButtonMaxValueAC,
-    InitCounterValueAC,
-    resetButtonMaxValueAC
-} from "./reducer/controlButtonReducer";
-import {
-    initPlaceholderAC,
-    resetPlaceholderAC
-} from "./reducer/placeholderReducer";
+import {controlButtonMaxValueAC, InitCounterValueAC, resetButtonMaxValueAC} from "./reducer/controlButtonReducer";
+import {initPlaceholderAC, resetPlaceholderAC} from "./reducer/placeholderReducer";
 
 export const INSTRUCTIONS_MESSAGE = 'Enter values and press \'set\'';
 export const ERROR_MESSAGE = 'Incorrect value!';
@@ -42,7 +35,7 @@ function App() {
     const [resultValue, setResultValue] = useState(0);
 
     useEffect(() => {
-        const max =  localStorage.getItem('max');
+        const max = localStorage.getItem('max');
         const start = localStorage.getItem('start');
         if (max && start) {
             const maxLocalValue = JSON.parse(max);
@@ -54,7 +47,7 @@ function App() {
 
     const counterIncrement = () => {
         setResultValue(resultValue + 1);
-        if (resultValue === initialValue.maxValue - 1 ) {
+        if (resultValue === initialValue.maxValue - 1) {
             dispatch(controlButtonMaxValueAC());
         }
     };
