@@ -22,7 +22,7 @@ export const controlButtonReducer = (state: ControlVisibleButtonType = initialSt
             return {isResultMax: false, isInitialValueSet: false}
         }
         case "INIT-COUNTER-VALUE": {
-            return { isInitialValueSet: true, isResultMax: false}
+            return {isInitialValueSet: true, isResultMax: false}
         }
         default:
             return state;

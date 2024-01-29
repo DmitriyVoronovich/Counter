@@ -1,16 +1,16 @@
-import { isPlaceholderVisibleType} from "../App";
+import {isPlaceholderVisibleType} from "../App";
 
 type PlaceholderReducerType = ResetPlaceholderACType
     | PlaceholderVisibleACType
     | PlaceholderNotVisibleACType
-    |InitPlaceholderACType;
+    | InitPlaceholderACType;
 
 const initialState = {
     isError: false,
     message: 'Enter values and press \'set\'',
     isVisible: true
 }
-export const placeholderReducer = (state: isPlaceholderVisibleType = initialState, action: PlaceholderReducerType):isPlaceholderVisibleType => {
+export const placeholderReducer = (state: isPlaceholderVisibleType = initialState, action: PlaceholderReducerType): isPlaceholderVisibleType => {
     switch (action.type) {
         case "RESET-PLACEHOLDER": {
             return {...state, isError: false}
