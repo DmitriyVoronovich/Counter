@@ -2,11 +2,11 @@ import React, {ChangeEvent} from 'react';
 import {Button} from "../../component/button/Button";
 import './settings.css'
 import {
-    isPlaceholderVisibleType,
     ControlVisibleButtonType,
-    InitialValueType,
     ERROR_MESSAGE,
-    INSTRUCTIONS_MESSAGE
+    InitialValueType,
+    INSTRUCTIONS_MESSAGE,
+    isPlaceholderVisibleType
 } from "../../App";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../../store/store";
@@ -24,9 +24,9 @@ export const Settings: React.FC<SettingsPropsType> = (props) => {
     const placeholder = useSelector<AppRootStateType, isPlaceholderVisibleType>(state => state.placeholder);
     const dispatch = useDispatch();
 
-    const { initCounter} = props;
+    const {initCounter} = props;
 
-    const changeMaxValue = ( maxInputValue: string) => {
+    const changeMaxValue = (maxInputValue: string) => {
         const max = parseInt(maxInputValue);
 
         dispatch(changeValueAC());
@@ -40,7 +40,7 @@ export const Settings: React.FC<SettingsPropsType> = (props) => {
         }
     };
 
-    const changeStartValue = ( startInputValue: string) => {
+    const changeStartValue = (startInputValue: string) => {
         dispatch(changeValueAC());
         const start = parseInt(startInputValue);
         dispatch(settingStartValueAC(start));
@@ -52,22 +52,30 @@ export const Settings: React.FC<SettingsPropsType> = (props) => {
         }
     };
 
-    const changeInputValue = ({currentTarget: {value, id}}: ChangeEvent<HTMLInputElement>) => id === 'maxValue' ? changeMaxValue(value) : changeStartValue(value);
+    const changeInputValue = ({
+                                  currentTarget: {
+                                      value,
+                                      id
+                                  }
+                              }: ChangeEvent<HTMLInputElement>) => id === 'maxValue' ? changeMaxValue(value) : changeStartValue(value);
 
     return (
         <div className={'setting_container'}>
             <div className={'setting'}>
                 <div className={'setting_value'}>
                     <h4>Max value:</h4>
-                    <input id='maxValue' type={'number'} value={initialValue.maxValue} onChange={changeInputValue} className={placeholder.isError ?'setting_value_error' : 'setting_value_input'}/>
+                    <input id='maxValue' type={'number'} value={initialValue.maxValue} onChange={changeInputValue}
+                           className={placeholder.isError ? 'setting_value_error' : 'setting_value_input'}/>
                 </div>
                 <div className={'setting_value'}>
                     <h4>Start value:</h4>
-                    <input id='startValue' type={'number'} value={initialValue.startValue} onChange={changeInputValue} className={placeholder.isError ?'setting_value_error' : 'setting_value_input'}/>
+                    <input id='startValue' type={'number'} value={initialValue.startValue} onChange={changeInputValue}
+                           className={placeholder.isError ? 'setting_value_error' : 'setting_value_input'}/>
                 </div>
             </div>
             <div className={'setting_button'}>
-                <Button name={'set'} callback={initCounter} error={placeholder.isError} disabled={controlButton.isInitialValueSet}/>
+                <Button name={'set'} callback={initCounter} error={placeholder.isError}
+                        disabled={controlButton.isInitialValueSet}/>
             </div>
         </div>
     );
