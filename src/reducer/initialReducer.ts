@@ -9,7 +9,8 @@ const initialState: InitialValueType = {
     maxValue: 1,
     startValue: 0
 
-}
+};
+
 export const initialReducer = (state: InitialValueType = initialState,
                                action: InitialReducerType): InitialValueType => {
     switch (action.type) {
