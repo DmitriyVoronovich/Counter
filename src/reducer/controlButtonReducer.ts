@@ -9,7 +9,8 @@ type ControlButtonReducerType = ControlButtonMaxValueACType
 const initialState = {
     isResultMax: false,
     isInitialValueSet: false
-}
+};
+
 export const controlButtonReducer = (state: ControlVisibleButtonType = initialState, action: ControlButtonReducerType): ControlVisibleButtonType => {
     switch (action.type) {
         case "CONTROL-BUTTON-MAX-VALUE": {

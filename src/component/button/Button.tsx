@@ -7,7 +7,7 @@ type ButtonPropsType = {
     disabled?: boolean
     error: boolean
     block?: boolean
-}
+};
 
 export const Button: React.FC<ButtonPropsType> = (props) => {
     const {name, callback, disabled, error, block} = props;
