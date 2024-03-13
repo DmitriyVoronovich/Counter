@@ -9,7 +9,7 @@ const initialState = {
     isError: false,
     message: 'Enter values and press \'set\'',
     isVisible: true
-}
+};
 export const placeholderReducer = (state: isPlaceholderVisibleType = initialState, action: PlaceholderReducerType): isPlaceholderVisibleType => {
     switch (action.type) {
         case "RESET-PLACEHOLDER": {
@@ -29,14 +29,14 @@ export const placeholderReducer = (state: isPlaceholderVisibleType = initialStat
     }
 };
 
-type ResetPlaceholderACType = ReturnType<typeof resetPlaceholderAC>
+type ResetPlaceholderACType = ReturnType<typeof resetPlaceholderAC>;
 export const resetPlaceholderAC = () => {
     return {
         type: 'RESET-PLACEHOLDER',
     } as const
 };
 
-type PlaceholderVisibleACType = ReturnType<typeof placeholderVisibleAC>
+type PlaceholderVisibleACType = ReturnType<typeof placeholderVisibleAC>;
 export const placeholderVisibleAC = (message: string) => {
     return {
         type: 'PLACEHOLDER-VISIBLE',
@@ -46,7 +46,7 @@ export const placeholderVisibleAC = (message: string) => {
     } as const
 };
 
-type PlaceholderNotVisibleACType = ReturnType<typeof placeholderNotVisibleAC>
+type PlaceholderNotVisibleACType = ReturnType<typeof placeholderNotVisibleAC>;
 export const placeholderNotVisibleAC = (message: string) => {
     return {
         type: 'PLACEHOLDER-NOT-VISIBLE',
@@ -56,7 +56,7 @@ export const placeholderNotVisibleAC = (message: string) => {
     } as const
 };
 
-type InitPlaceholderACType = ReturnType<typeof initPlaceholderAC>
+type InitPlaceholderACType = ReturnType<typeof initPlaceholderAC>;
 export const initPlaceholderAC = () => {
     return {
         type: 'INIT-PLACEHOLDER'
