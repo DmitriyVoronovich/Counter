@@ -8,7 +8,6 @@ type InitialReducerType = InitStartValueACType
 const initialState: InitialValueType = {
     maxValue: 1,
     startValue: 0
-
 };
 
 export const initialReducer = (state: InitialValueType = initialState,
@@ -31,7 +30,6 @@ export const initialReducer = (state: InitialValueType = initialState,
     }
 };
 
-
 type InitStartValueACType = ReturnType<typeof initStartValueAC>;
 export const initStartValueAC = (maxValue: number, startValue: number) => {
     return {
@@ -42,7 +40,6 @@ export const initStartValueAC = (maxValue: number, startValue: number) => {
         }
     } as const
 };
-
 
 type SettingMaxValueACType = ReturnType<typeof settingMaxValueAC>
 export const settingMaxValueAC = (maxValue: number) => {
