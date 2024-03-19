@@ -1,15 +1,8 @@
 import React from 'react';
-import './button.css'
+import './button.css';
+import {ButtonPropsType} from "../../types/types";
 
-type ButtonPropsType = {
-    name: string
-    callback: () => void
-    disabled?: boolean
-    error: boolean
-    block?: boolean
-};
-
-export const Button: React.FC<ButtonPropsType> = (props) => {
+export const Button = (props: ButtonPropsType) => {
     const {name, callback, disabled, error, block} = props;
 
     return (

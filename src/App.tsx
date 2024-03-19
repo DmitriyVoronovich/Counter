@@ -7,25 +7,10 @@ import {AppRootStateType} from "./store/store";
 import {initStartValueAC} from "./reducer/initialReducer";
 import {controlButtonMaxValueAC, InitCounterValueAC, resetButtonMaxValueAC} from "./reducer/controlButtonReducer";
 import {initPlaceholderAC, resetPlaceholderAC} from "./reducer/placeholderReducer";
+import {InitialValueType} from "./types/types";
 
 export const INSTRUCTIONS_MESSAGE = 'Enter values and press \'set\'';
 export const ERROR_MESSAGE = 'Incorrect value!';
-
-export type InitialValueType = {
-    maxValue: number,
-    startValue: number
-};
-
-export type isPlaceholderVisibleType = {
-    isError: boolean
-    message: string
-    isVisible: boolean
-};
-
-export type ControlVisibleButtonType = {
-    isResultMax: boolean
-    isInitialValueSet: boolean
-};
 
 function App() {
 
@@ -64,7 +49,7 @@ function App() {
         dispatch(initPlaceholderAC());
         localStorage.setItem('max', JSON.stringify(initialValue.maxValue));
         localStorage.setItem('start', JSON.stringify(initialValue.startValue));
-    }
+    };
 
     return (
         <div className="App">
